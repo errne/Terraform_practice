@@ -7,7 +7,7 @@ provider "aws" {
 # backend
 terraform {
   backend "s3" {
-    bucket = "sceptre-testing-buck"
+    bucket = "tf-state-backend-storage"
     key = "aws/s3"
     region = "eu-west-1"
   }
@@ -16,11 +16,16 @@ terraform {
 module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
-  bucket = "s3-module-bucket"
+  bucket = "terraformwebst-testing-buck"
   acl    = "private"
 
   versioning = {
     enabled = true
+  }
+
+  website = {
+  index_document = "index.html"
+  error_document = "e404.html"
   }
 
 }
