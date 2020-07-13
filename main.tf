@@ -24,8 +24,13 @@ module "s3_bucket" {
   }
 
   website = {
-  index_document = "index.html"
-  error_document = "e404.html"
+    index_document = "index.html"
+    error_document = "e404.html"
+  }
+
+  tags = {
+    Name = "terraformwebst-testing-buck",
+    Function = "Terraform test"
   }
 
 }
