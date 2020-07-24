@@ -2,12 +2,13 @@ module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "~> 3.0"
 
-  name = "service"
+  name = "test"
 
   # Launch configuration
   lc_name = "tf-test-lc"
 
   image_id        = "ami-0c3e74fa87d2a4227"
+  key_name        = "spraktas"
   instance_type   = "t2.micro"
   security_groups = ["sg-0176ce5ea22452d2e"]
 
@@ -28,12 +29,13 @@ module "asg" {
   ]
 
   # Auto scaling group
-  asg_name                  = "tf-test-asg"
+  asg_name                  = "tf"
+  user_data                 = "${file("userdata.sh")}"
   vpc_zone_identifier       = ["subnet-ca266182", "subnet-f2bcc894"]
   health_check_type         = "EC2"
   min_size                  = 0
   max_size                  = 1
-  desired_capacity          = 0
+  desired_capacity          = 1
   wait_for_capacity_timeout = 0
 
   tags = [
