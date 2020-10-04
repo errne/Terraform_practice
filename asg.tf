@@ -1,10 +1,10 @@
 resource "aws_iam_instance_profile" "test_profile" {
   name = "tf_test_profile"
-  role = "aws_iam_role.role.name"
+  role = aws_iam_role.role.name
 }
 
 resource "aws_iam_role" "role" {
-  name = "tf_test_role"
+  name = "tf_test_role2"
   path = "/"
 
   assume_role_policy = <<EOF
@@ -22,6 +22,15 @@ resource "aws_iam_role" "role" {
     ]
 }
 EOF
+}
+
+data "aws_iam_policy" "EC2SSM" {
+  arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+}
+
+resource "aws_iam_role_policy_attachment" "ssm-role-policy-attach" {
+  role       = aws_iam_role.role.name
+  policy_arn = data.aws_iam_policy.EC2SSM.arn
 }
 
 
