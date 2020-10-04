@@ -1,3 +1,4 @@
+  #IAM Role
 resource "aws_iam_instance_profile" "test_profile" {
   name = "tf_test_profile"
   role = aws_iam_role.role.name
@@ -24,6 +25,7 @@ resource "aws_iam_role" "role" {
 EOF
 }
 
+  # IAM Policy and attachment
 data "aws_iam_policy" "EC2SSM" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
