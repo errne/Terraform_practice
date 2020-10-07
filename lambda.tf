@@ -17,18 +17,18 @@ module "lambda_function_existing_package_s3" {
   runtime       = "python3.7"
   publish       = true
 
-  create_package      = false
+  create_package = false
   s3_existing_package = {
     bucket = "lambda-code-storage-bucket"
     key    = aws_s3_bucket_object.my_function.id
-    }
+  }
 
   environment_variables = {
-      TABLE_NAME = "clients"
+    TABLE_NAME = "clients"
   }
 
   tags = {
-  Name = "get_one_lambda"
-  Language = "Python"
+    Name     = "get_one_lambda"
+    Language = "Python"
   }
 }

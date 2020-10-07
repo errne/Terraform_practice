@@ -8,7 +8,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket = "tf-state-backend-storage"
-    key = "aws/s3"
+    key    = "aws/s3"
     region = "eu-west-1"
   }
 }
@@ -29,7 +29,7 @@ module "s3_bucket" {
   }
 
   tags = {
-    Name = "terraformwebst-testing-buck",
+    Name     = "terraformwebst-testing-buck"
     Function = "Terraform test"
   }
 

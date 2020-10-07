@@ -1,4 +1,4 @@
-  #IAM Role
+#IAM Role
 resource "aws_iam_instance_profile" "test_profile" {
   name = "tf_test_profile"
   role = aws_iam_role.role.name
@@ -25,7 +25,7 @@ resource "aws_iam_role" "role" {
 EOF
 }
 
-  # IAM Policy and attachment
+# IAM Policy and attachment
 data "aws_iam_policy" "EC2SSM" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
@@ -37,17 +37,17 @@ resource "aws_iam_role_policy_attachment" "ssm-role-policy-attach" {
 
 
 module "asg" {
-  source  = "terraform-aws-modules/autoscaling/aws"
-  name = "test"
+  source = "terraform-aws-modules/autoscaling/aws"
+  name   = "test"
 
   # Launch configuration
   lc_name = "tf-test-lc"
 
-  image_id        = "ami-0c3e74fa87d2a4227"
-  key_name        = "spraktas"
-  instance_type   = "t2.micro"
+  image_id             = "ami-0c3e74fa87d2a4227"
+  key_name             = "spraktas"
+  instance_type        = "t2.micro"
   iam_instance_profile = aws_iam_instance_profile.test_profile.name
-  security_groups = ["sg-0176ce5ea22452d2e"]
+  security_groups      = ["sg-0176ce5ea22452d2e"]
 
   ebs_block_device = [
     {
