@@ -13,7 +13,7 @@ module "lambda_function_existing_package_s3" {
 
   function_name = "get_one_lambda"
   description   = "Lambda function to get one item from specified Dynamo DB table"
-  handler       = "index.lambda_handler"
+  handler       = "get_one_item_from_ddb.lambda_handler"
   runtime       = "python3.7"
   publish       = true
 
