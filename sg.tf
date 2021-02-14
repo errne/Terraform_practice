@@ -3,9 +3,9 @@ module "security_group" {
 
   name        = "terraform-test"
   description = "Security group for testing terraform build"
-  vpc_id      = "vpc-769ba010"
+  vpc_id      = var.vpc_id
 
-  ingress_cidr_blocks = ["172.31.0.0/16"]
+  ingress_cidr_blocks = [var.vpc_range]
   ingress_rules       = ["https-443-tcp"]
   ingress_with_cidr_blocks = [
     {
@@ -13,7 +13,7 @@ module "security_group" {
       to_port     = 80
       protocol    = "tcp"
       description = "User-service ports"
-      cidr_blocks = "172.31.0.0/16"
+      cidr_blocks = ingress_cidr_blocks
     },
     {
       rule        = "postgresql-tcp"
