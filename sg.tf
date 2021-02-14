@@ -1,3 +1,7 @@
+data "aws_ssm_parameter" "home_ip" {
+  name = "Home_ip"
+}
+
 resource "aws_security_group" "allow_tls" {
   name        = "allow_tls"
   description = "Allow TLS inbound traffic"
@@ -9,6 +13,14 @@ resource "aws_security_group" "allow_tls" {
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = [var.vpc_range]
+  }
+
+  ingress {
+    description = "HTTP from Home"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = [data.aws_ssm_parameter.home_ip.value]
   }
 
   egress {
