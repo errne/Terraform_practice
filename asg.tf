@@ -47,7 +47,7 @@ module "asg" {
   key_name             = "spraktas"
   instance_type        = "t2.micro"
   iam_instance_profile = aws_iam_instance_profile.test_profile.name
-  security_groups      = ["sg-0176ce5ea22452d2e", module.security_group.this_security_group_id]
+  security_groups      = ["sg-0176ce5ea22452d2e", aws_security_group.allow_tls.id]
 
   ebs_block_device = [
     {

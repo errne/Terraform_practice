@@ -1,23 +1,25 @@
-module "security_group" {
-  source = "terraform-aws-modules/security-group/aws"
-
-  name        = "terraform-test"
-  description = "Security group for testing terraform build"
+resource "aws_security_group" "allow_tls" {
+  name        = "allow_tls"
+  description = "Allow TLS inbound traffic"
   vpc_id      = var.vpc_id
 
-  ingress_cidr_blocks = [var.vpc_range]
-  ingress_rules       = ["https-443-tcp"]
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = 80
-      to_port     = 80
-      protocol    = "tcp"
-      description = "User-service ports"
-      cidr_blocks = ingress_cidr_blocks
-    },
-    {
-      rule        = "postgresql-tcp"
-      cidr_blocks = "0.0.0.0/0"
-    },
-  ]
+  ingress {
+    description = "TLS from VPC"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_range]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name     = "allow_tls"
+    Function = "Testing Terraform sg resource"
+  }
 }
