@@ -47,7 +47,7 @@ module "asg" {
   key_name             = "spraktas"
   instance_type        = "t2.micro"
   iam_instance_profile = aws_iam_instance_profile.test_profile.name
-  security_groups      = ["sg-0176ce5ea22452d2e"]
+  security_groups      = ["sg-0176ce5ea22452d2e", module.security_group.this_security_group_id]
 
   ebs_block_device = [
     {
@@ -72,7 +72,7 @@ module "asg" {
   health_check_type         = "EC2"
   min_size                  = 0
   max_size                  = 1
-  desired_capacity          = 1
+  desired_capacity          = 0
   wait_for_capacity_timeout = 0
 
   tags = [
