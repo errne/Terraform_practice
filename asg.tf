@@ -43,7 +43,7 @@ module "asg" {
   # Launch configuration
   lc_name = "tf-test-lc"
 
-  image_id             = "ami-0c3e74fa87d2a4227"
+  image_id             = "ami-04e7764922e1e3a57"
   key_name             = "spraktas"
   instance_type        = "t2.micro"
   iam_instance_profile = aws_iam_instance_profile.test_profile.name
@@ -52,7 +52,7 @@ module "asg" {
   ebs_block_device = [
     {
       device_name           = "/dev/xvdz"
-      volume_type           = "gp2"
+      volume_type           = "gp3"
       volume_size           = "10"
       delete_on_termination = true
     },
@@ -61,7 +61,7 @@ module "asg" {
   root_block_device = [
     {
       volume_size = "10"
-      volume_type = "gp2"
+      volume_type = "gp3"
     },
   ]
 
