@@ -1,9 +1,16 @@
-resource "datadog_monitor" "lambda_cost_monitor" {
-  name        = "Lambda Cost Monitor"
-  type        = "metric alert"
-  query       = "avg:aws.lambda.enhanced.invocations{*} + avg:aws.lambda.enhanced.duration{*} + avg:aws.lambda.enhanced.max_memory_used{*}"
-  message     = "Lambda function cost is increasing!"
-  thresholds  = "critical: 1000"
-  notify_no_data = true
-  no_data_timeframe = 30
+resource "datadog_monitor" "lambda_error_monitor" {
+  name    = "Lambda Error Monitor"
+  type    = "metric alert"
+  query   = "avg(last_5m):sum:aws.lambda.errors.count{*} by {functionname} > 5"
+  message = "High number of errors on lambda function @slack-channel"
+
+  thresholds = {
+    critical = 5
+    warning  = 3
+  }
+
+  notify_no_data    = false
+  no_data_timeframe = 20
+
+  tags = ["terraform", "lambda", "error-monitoring"]
 }
