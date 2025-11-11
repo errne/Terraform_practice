@@ -1,15 +1,11 @@
-# ecs.tf
-
-# 1. ECR Repository to store the Docker image
 resource "aws_ecr_repository" "app_repo" {
-  name = "my-app-repo" # Choose a name for your repository
+  name = "my-app-repo"
 
   tags = {
     Project = "ECS-Example"
   }
 }
 
-# 2. ECS Cluster
 resource "aws_ecs_cluster" "main" {
   name = "main-cluster"
 
@@ -18,7 +14,6 @@ resource "aws_ecs_cluster" "main" {
   }
 }
 
-# 3. IAM Role for ECS Task Execution
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "ecs_task_execution_role"
 
@@ -45,7 +40,6 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-# 4. ECS Task Definition
 resource "aws_ecs_task_definition" "app_task" {
   family                   = "app-task-family"
   network_mode             = "awsvpc"
@@ -57,9 +51,6 @@ resource "aws_ecs_task_definition" "app_task" {
   container_definitions = jsonencode([
     {
       name      = "my-app-container"
-      # IMPORTANT: Replace this with the URI of your actual image in ECR
-      # After creating the ECR repo, push your image and update this line.
-      # Example: "${aws_ecr_repository.app_repo.repository_url}:latest"
       image     = "ubuntu:latest"
       cpu       = 256
       memory    = 512
@@ -70,8 +61,6 @@ resource "aws_ecs_task_definition" "app_task" {
           hostPort      = 80
         }
       ]
-      # The command that the container will run. For this ubuntu image,
-      # it will print a message and exit. Replace with your application's command.
       command = ["/bin/sh", "-c", "echo 'Hello from my ECS container!' && sleep 3600"]
     }
   ])
@@ -81,7 +70,6 @@ resource "aws_ecs_task_definition" "app_task" {
   }
 }
 
-# 5. ECS Service
 resource "aws_ecs_service" "app_service" {
   name            = "app-service"
   cluster         = aws_ecs_cluster.main.id
@@ -90,18 +78,16 @@ resource "aws_ecs_service" "app_service" {
   desired_count   = 1
 
   network_configuration {
-    # IMPORTANT: Replace with your VPC's subnets and a security group
-    subnets         = ["subnet-ca266182", "subnet-f2bcc894"] # Example subnets, replace with yours
-    security_groups = [aws_security_group.allow_tls.id]      # Example security group, replace with yours
+    subnets         = ["subnet-ca266182", "subnet-f2bcc894"]
+    security_groups = [aws_security_group.allow_tls.id]
     assign_public_ip = true
   }
 
-  # Optional: Add a load balancer
-  # load_balancer {
-  #   target_group_arn = aws_lb_target_group.app_tg.arn
-  #   container_name   = "my-app-container"
-  #   container_port   = 80
-  # }
+  load_balancer {
+    target_group_arn = aws_lb_target_group.app_tg.arn
+    container_name   = "my-app-container"
+    container_port   = 80
+  }
 
   depends_on = [aws_iam_role_policy_attachment.ecs_task_execution_role_policy]
 
